@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import styles from "./MainNavbar.module.css";
 import logo from "../../assets/ohara-logo2.png";
 import NavList from "./NavList";
@@ -11,6 +11,8 @@ const setActiveClass = ({ isActive }) => {
 };
 
 const MainNavbar = () => {
+  const navigate = useNavigate();
+
   return (
     <header className={styles.header}>
       <NavList>
@@ -38,12 +40,17 @@ const MainNavbar = () => {
           <SearchInput />
         </NavItem>
         <NavItem className={styles.link}>
-          <NavLink to="">
-            <i class="fa-solid fa-cart-shopping"></i>
-          </NavLink>
+          <i className="fa-solid fa-cart-shopping"></i>
         </NavItem>
         <NavItem>
-          <Button>Sign in</Button>
+          <Button
+            onClick={() => {
+              console.log("xxx");
+              navigate("/sign-in");
+            }}
+          >
+            Sign in
+          </Button>
         </NavItem>
       </NavList>
     </header>

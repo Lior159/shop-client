@@ -8,6 +8,7 @@
 }
 
 .btn:hover {
+  cursor: pointer;
   color: white;
   background-color: rgba(0, 0, 0, 0.7);
 }
