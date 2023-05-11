@@ -1,8 +1,8 @@
 import Input from "../components/ui/Input";
 import NewForm from "../components/ui/NewForm";
 import Button from "../components/ui/Button";
-import { useReducer, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useReducer } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const inputReducer = (state, action) => {
   const newState = {
@@ -33,57 +33,63 @@ const SigninPage = () => {
     emailErr: "",
     passwordErr: "",
   });
-  const [otherError, setOtherError] = useState("");
 
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    const res = await fetch("http://localhost:8080/sign-in", {
-      method: "POST",
-      body: JSON.stringify({
-        email: inputState.emailValue,
-        password: inputState.passwordValue,
-      }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    try {
+      const res = await fetch("http://localhost:8080/sign-in", {
+        method: "POST",
+        body: JSON.stringify({
+          email: inputState.emailValue,
+          password: inputState.passwordValue,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-    //server or db error
-    if (res.status === 502) {
-      return setOtherError("Somthing is wrong with the server");
-    }
-
-    const data = await res.json();
-
-    //invalid input || email not exist || wrong password
-    if (res.status === 400) {
-      if (data.message === "Invalid field") {
-        dispatchInput({
-          type: "INVALIDATE_INPUT",
-          emailErr:
-            data.errors.find((err) => err.field === "email")?.message || "",
-          passwordErr:
-            data.errors.find((err) => err.field === "password")?.message || "",
-        });
-      } else {
-        setOtherError(res.body.message);
+      //server or db error
+      if (res.status === 502) {
+        throw new Error("Somthing is wrong with the server");
       }
-    }
-    if (res.status === 200) {
-      console.log(data.message, data.userId);
-      navigate("/");
+
+      const data = await res.json();
+
+      //invalid input || email not exist || wrong password
+      if (res.status === 400) {
+        if (data.message === "Invalid field") {
+          dispatchInput({
+            type: "INVALIDATE_INPUT",
+            emailErr:
+              data.errors.find((err) => err.field === "email")?.message || "",
+            passwordErr:
+              data.errors.find((err) => err.field === "password")?.message ||
+              "",
+          });
+        } else {
+          dispatchInput({
+            type: "INVALID_INPUT",
+            emailErr: data.message.includes("Email") ? data.message : "",
+            passwordErr: data.message.includes("password") ? data.message : "",
+          });
+        }
+      }
+      if (res.status === 200) {
+        console.log(data.message, data.userId);
+        navigate("/");
+      }
+    } catch (error) {
+      console.log(error.message);
     }
   };
 
   const emailChangeHndler = (e) => {
     dispatchInput({ type: "EMAIL_UPDATE", value: e.target.value });
-    otherError.length > 0 && setOtherError("");
   };
 
   const passwordChangeHandler = (e) => {
     dispatchInput({ type: "PASSWORD_UPDATE", value: e.target.value });
-    otherError.length > 0 && setOtherError("");
   };
 
   return (
@@ -108,7 +114,11 @@ const SigninPage = () => {
         invalid={inputState.passwordErr.length > 0}
       />
       <h5>{inputState.passwordErr}</h5>
+      <Link to="/reset-password">Forgot your password?</Link>
       <Button>Sign in</Button>
+      <p>
+        Don't have an account? <Link to="/sign-up">Sign up</Link>
+      </p>
     </NewForm>
   );
 };
