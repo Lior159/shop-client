@@ -1,56 +1,52 @@
 import Input from "../components/ui/Input";
 import NewForm from "../components/ui/NewForm";
 import Button from "../components/ui/Button";
-import { useReducer } from "react";
+import { useCallback, useReducer } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
-const inputReducer = (state, action) => {
-  const newState = {
-    firstNameValue: state.firstNameValue,
-    lastNameValue: state.lastNameValue,
-    emailValue: state.emailValue,
-    passwordValue: state.passwordValue,
-    passwordConfirmValue: state.passwordConfirmValue,
-    firstNameErr: state.firstNameErr,
-    lastNameErr: state.lastNameErr,
-    emailErr: state.emailErr,
-    passwordErr: state.passwordErr,
-    passwordConfirmErr: state.passwordConfirmErr,
+const inputReducer = (state, { value, type, ...action }) => {
+  const updateProps = {
+    FIRSTNAME_UPDATE: { firstName: value, firstNameErr: "" },
+    LASTNAME_UPDATE: { lastName: value, lastNameErr: "" },
+    EMAIL_UPDATE: { email: value, emailErr: "" },
+    PASSWORD_UPDATE: { password: value, passwordErr: "" },
+    PASSWORDCONFIRM_UPDATE: {
+      passwordConfirm: value,
+      passwordConfirmErr: "",
+    },
   };
-  if (action.type === "FIRSTNAME_UPDATE") {
-    newState.firstNameValue = action.value;
-    newState.firstNameErr = "";
-  } else if (action.type === "LASTNAME_UPDATE") {
-    newState.lastNameValue = action.value;
-    newState.lastNameErr = "";
-  } else if (action.type === "EMAIL_UPDATE") {
-    newState.emailValue = action.value;
-    newState.emailErr = "";
-  } else if (action.type === "PASSWORD_UPDATE") {
-    newState.passwordValue = action.value;
-    newState.passwordErr = "";
-  } else if (action.type === "PASSWORDCONFIRM_UPDATE") {
-    newState.passwordConfirmValue = action.value;
-    newState.passwordConfirmErr = "";
-  } else {
-    newState.firstNameErr = action.firstNameErr;
-    newState.lastNameErr = action.lastNameErr;
-    newState.emailErr = action.emailErr;
-    newState.passwordErr = action.passwordErr;
-    newState.passwordConfirmErr = action.passwordConfirmErr;
+
+  if (type in updateProps) {
+    return {
+      ...state,
+      ...updateProps[type],
+    };
   }
-  return newState;
+
+  const errorsProps = Object.entries(action).reduce(
+    (acc, [key, val]) =>
+      val === "Empty fields are not allowd"
+        ? { ...acc, [key]: "" }
+        : { ...acc, [key]: val },
+    {}
+  );
+
+  if (errorsProps.length > 0) {
+    return { ...state, ...errorsProps };
+  }
+
+  return state;
 };
 
 const SignupPage = () => {
   const navigate = useNavigate();
 
   const [inputState, dispatchInput] = useReducer(inputReducer, {
-    firstNameValue: "",
-    lastNameValue: "",
-    emailValue: "",
-    passwordValue: "",
-    passwordConfirmValue: "",
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+    passwordConfirm: "",
     firstNameErr: "",
     lastNameErr: "",
     emailErr: "",
@@ -61,15 +57,18 @@ const SignupPage = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
 
+    const { firstName, lastName, email, password, passwordConfirm } =
+      inputReducer;
+
     try {
       const res = await fetch("http://localhost:8080/sign-up", {
         method: "POST",
         body: JSON.stringify({
-          firstName: inputState.firstNameValue,
-          lastName: inputState.lastNameValue,
-          email: inputState.emailValue,
-          password: inputState.passwordValue,
-          passwordConfirm: inputState.passwordConfirmValue,
+          firstName,
+          lastName,
+          email,
+          password,
+          passwordConfirm,
         }),
         headers: {
           "Content-Type": "application/json",
@@ -120,25 +119,25 @@ const SignupPage = () => {
     }
   };
 
-  const firstNameChangeHandler = (e) => {
+  const firstNameChangeHandler = useCallback((e) => {
     dispatchInput({ type: "FIRSTNAME_UPDATE", value: e.target.value });
-  };
+  }, []);
 
-  const lastNameChangeHandler = (e) => {
+  const lastNameChangeHandler = useCallback((e) => {
     dispatchInput({ type: "LASTNAME_UPDATE", value: e.target.value });
-  };
+  }, []);
 
-  const emailChangeHndler = (e) => {
+  const emailChangeHndler = useCallback((e) => {
     dispatchInput({ type: "EMAIL_UPDATE", value: e.target.value });
-  };
+  }, []);
 
-  const passwordChangeHandler = (e) => {
+  const passwordChangeHandler = useCallback((e) => {
     dispatchInput({ type: "PASSWORD_UPDATE", value: e.target.value });
-  };
+  }, []);
 
-  const passwordConfirmChangeHandler = (e) => {
+  const passwordConfirmChangeHandler = useCallback((e) => {
     dispatchInput({ type: "PASSWORDCONFIRM_UPDATE", value: e.target.value });
-  };
+  }, []);
 
   return (
     <NewForm onSubmit={submitHandler}>

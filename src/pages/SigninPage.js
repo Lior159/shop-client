@@ -1,7 +1,7 @@
 import Input from "../components/ui/Input";
 import NewForm from "../components/ui/NewForm";
 import Button from "../components/ui/Button";
-import { useReducer } from "react";
+import { useCallback, useReducer } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const inputReducer = (state, action) => {
@@ -58,6 +58,8 @@ const SigninPage = () => {
 
       //invalid input || email not exist || wrong password
       if (res.status === 400) {
+        const { message, errors } = data;
+
         if (data.message === "Invalid field") {
           dispatchInput({
             type: "INVALIDATE_INPUT",
@@ -84,13 +86,13 @@ const SigninPage = () => {
     }
   };
 
-  const emailChangeHndler = (e) => {
+  const emailChangeHndler = useCallback((e) => {
     dispatchInput({ type: "EMAIL_UPDATE", value: e.target.value });
-  };
+  }, []);
 
-  const passwordChangeHandler = (e) => {
+  const passwordChangeHandler = useCallback((e) => {
     dispatchInput({ type: "PASSWORD_UPDATE", value: e.target.value });
-  };
+  }, []);
 
   return (
     <NewForm onSubmit={submitHandler}>
