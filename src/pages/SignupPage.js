@@ -25,13 +25,15 @@ const inputReducer = (state, { value, type, ...action }) => {
 
   const errorsProps = Object.entries(action).reduce(
     (acc, [key, val]) =>
-      val === "Empty fields are not allowd"
-        ? { ...acc, [key]: "" }
+      val === "Empty fields are not allowed"
+        ? { ...acc, [key]: " " }
         : { ...acc, [key]: val },
     {}
   );
 
-  if (errorsProps.length > 0) {
+  console.log(errorsProps);
+
+  if (Object.keys(action).length > 0) {
     return { ...state, ...errorsProps };
   }
 
@@ -58,7 +60,7 @@ const SignupPage = () => {
     e.preventDefault();
 
     const { firstName, lastName, email, password, passwordConfirm } =
-      inputReducer;
+      inputState;
 
     try {
       const res = await fetch("http://localhost:8080/sign-up", {

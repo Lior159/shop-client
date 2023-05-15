@@ -1,0 +1,65 @@
+.product {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  height: 600px;
+}
+
+.product-image {
+  height: 55%;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+}
+
+.product-description {
+  height: 35%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  padding: 20px 10px;
+}
+
+.product-description h3 {
+  font-weight: 400;
+}
+
+.product-description p {
+  font-weight: 300;
+  font-size: 14px;
+}
+
+.product-actions {
+  height: 10%;
+  display: flex;
+}
+
+.product-actions form {
+  width: 100%;
+  display: flex;
+}
+
+.product-actions form a,
+.product-actions form button {
+  width: 50%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  text-decoration: none;
+  background-color: white;
+  cursor: pointer;
+  border-style: solid;
+  border-color: white;
+  border-width: 0 1px;
+  transition: all 0.5s;
+  color: black;
+}
+
+.product-actions form a:hover,
+.product-actions form button:hover {
+  background-color: black;
+  color: white;
+}
