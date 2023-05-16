@@ -194,10 +194,7 @@ const SignupPage = () => {
       />
       <h5>{inputState.passwordConfirmErr}</h5>
       <Link to="/reset-password">Forgot your password?</Link>
-      <Button>Sign in</Button>
-      <p>
-        Don't have an account? <Link to="/sign-up">Sign up</Link>
-      </p>
+      <Button>Sign Up</Button>
     </NewForm>
   );
 };

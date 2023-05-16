@@ -58,8 +58,6 @@ const SigninPage = () => {
 
       //invalid input || email not exist || wrong password
       if (res.status === 400) {
-        const { message, errors } = data;
-
         if (data.message === "Invalid field") {
           dispatchInput({
             type: "INVALIDATE_INPUT",

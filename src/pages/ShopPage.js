@@ -1,10 +1,9 @@
-import styles from "./ShopPage.module.css";
 import Product from "../components/products/Product";
 
 const ShopPage = () => {
   return (
-    <section className={styles["shop-section"]}>
-      <div className={styles["left-menu"]}>
+    <section className="shop-section">
+      <div className="left-menu">
         <div>
           <h4>Price</h4>
           <div>
@@ -14,7 +13,10 @@ const ShopPage = () => {
           </div>
         </div>
       </div>
-      <div className={styles["products-container"]}>
+      <div className="products-container">
+        <Product />
+        <Product />
+        <Product />
         <Product />
         <Product />
         <Product />
