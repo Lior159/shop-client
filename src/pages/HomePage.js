@@ -1,5 +1,11 @@
+import LoadSpinner from "../components/ui/LoadSpinner";
+
 const HomePage = () => {
-  <h1>home</h1>;
+  return (
+    <section>
+      <LoadSpinner />
+    </section>
+  );
 };
 
 export default HomePage;

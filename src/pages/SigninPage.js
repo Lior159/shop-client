@@ -1,31 +1,38 @@
 import Input from "../components/ui/Input";
-import NewForm from "../components/ui/NewForm";
+import FromContainer from "../components/ui/FormContainer";
 import Button from "../components/ui/Button";
-import { useCallback, useReducer } from "react";
+import { useCallback, useContext, useReducer } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import AuthContext from "../store/auth-context";
 
-const inputReducer = (state, action) => {
-  const newState = {
-    emailValue: state.emailValue,
-    passwordValue: state.passwordValue,
-    emailErr: state.emailErr,
-    passwordErr: state.passwordErr,
+const inputReducer = (state, { value, type, ...action }) => {
+  const updateProps = {
+    EMAIL_UPDATE: { emailValue: value, emailErr: "" },
+    PASSWORD_UPDATE: { passwordValue: value, passwordErr: "" },
   };
-  if (action.type === "EMAIL_UPDATE") {
-    newState.emailValue = action.value;
-    newState.emailErr = "";
-  } else if (action.type === "PASSWORD_UPDATE") {
-    newState.passwordValue = action.value;
-    newState.passwordErr = "";
-  } else {
-    newState.emailErr = action.emailErr;
-    newState.passwordErr = action.passwordErr;
+
+  if (type in updateProps) {
+    return {
+      ...state,
+      ...updateProps[type],
+    };
   }
-  return newState;
+
+  return {
+    ...state,
+    emailErr:
+      action.emailErr === "Empty fields are not allowd" ? " " : action.emailErr,
+    passwordErr:
+      action.passwordErr === "Empty fields are not allowd"
+        ? " "
+        : action.passwordErr,
+  };
 };
 
 const SigninPage = () => {
   const navigate = useNavigate();
+
+  const authCtx = useContext(AuthContext);
 
   const [inputState, dispatchInput] = useReducer(inputReducer, {
     emailValue: "",
@@ -76,7 +83,13 @@ const SigninPage = () => {
         }
       }
       if (res.status === 200) {
-        console.log(data.message, data.userId);
+        console.log(data);
+        authCtx.dispatchAuth({
+          type: "LOGIN",
+          token: data.token,
+          userID: data.userId,
+        });
+        console.log(authCtx.authState);
         navigate("/");
       }
     } catch (error) {
@@ -93,33 +106,26 @@ const SigninPage = () => {
   }, []);
 
   return (
-    <NewForm onSubmit={submitHandler}>
+    <FromContainer onSubmit={submitHandler}>
       <Input
-        input={{
-          type: "text",
-          placeholder: "Email",
-          value: inputState.emailValue,
-          onChange: emailChangeHndler,
-        }}
-        invalid={inputState.emailErr.length > 0}
+        placeholder="Email"
+        value={inputState.emailValue}
+        onChange={emailChangeHndler}
+        err={inputState.emailErr}
       />
-      <h5>{inputState.emailErr}</h5>
       <Input
-        input={{
-          type: "password",
-          placeholder: "Password",
-          value: inputState.passwordValue,
-          onChange: passwordChangeHandler,
-        }}
-        invalid={inputState.passwordErr.length > 0}
+        type="password"
+        placeholder="Password"
+        value={inputState.passwordValue}
+        onChange={passwordChangeHandler}
+        err={inputState.passwordErr}
       />
-      <h5>{inputState.passwordErr}</h5>
       <Link to="/reset-password">Forgot your password?</Link>
       <Button>Sign in</Button>
       <p>
         Don't have an account? <Link to="/sign-up">Sign up</Link>
       </p>
-    </NewForm>
+    </FromContainer>
   );
 };
 

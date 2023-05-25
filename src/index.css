@@ -6,11 +6,35 @@
   box-sizing: border-box;
   font-family: "Poppins", sans-serif;
   list-style: none;
-  text-decoration: none;
 }
 
 main {
   margin: 40px 20px;
+}
+
+@keyframes spinner {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 10px solid #f3f3f3; /* Light grey */
+  border-top: 10px solid #383636; /* Blue */
+  border-radius: 50%;
+  animation: spinner 1.5s linear infinite;
+}
+
+.spinner-container {
+  display: grid;
+  justify-content: center;
+  align-items: center;
+  height: 350px;
 }
 
 button {
@@ -43,6 +67,12 @@ button {
   text-align: center;
 }
 
+.form-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .form-container input,
 .form-container button {
   display: block;
@@ -58,15 +88,10 @@ button {
   margin-top: 20px;
 }
 
-.form-container form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-input.invalid {
+.invalid {
   border-color: red;
   background-color: rgb(251, 168, 159);
+  transition: 0.5s;
 }
 
 /*---------- navbar ----------*/
@@ -76,7 +101,7 @@ input.invalid {
   justify-content: space-between;
   background-color: white;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-  padding: 20px 10px;
+  padding: 20px 20px;
   position: sticky;
   top: 0;
   z-index: 3;
@@ -86,19 +111,16 @@ input.invalid {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 40px;
 }
 
-.navbar .item {
-  margin: 0 20px;
-}
-
-.navbar .item a {
+.navbar li a {
   text-decoration: none;
   color: rgb(130, 130, 130);
   transition: color 0.3s;
 }
 
-.navbar .left .item a::after {
+.navbar .left li a::after {
   content: "";
   height: 2px;
   width: 0;
@@ -108,13 +130,13 @@ input.invalid {
   transition: width 0.5s;
 }
 
-.navbar .item a:hover,
-.navbar .item a.active {
+.navbar li a:hover,
+.navbar li a.active {
   color: black;
 }
 
-.navbar .left .item a.active::after,
-.navbar .left .item a:hover::after {
+.navbar .left li a.active::after,
+.navbar .left li a:hover::after {
   width: 100%;
 }
 
@@ -138,7 +160,7 @@ input.invalid {
   transition: all 0.5s;
 }
 
-button:hover {
+.search_btn:hover {
   color: black;
 }
 
@@ -151,8 +173,8 @@ button:hover {
   outline: none;
 }
 
-.navbar .search-box input,
-.navbar .search-box input:focus {
+.search-box input,
+.search-box input:focus {
   font-size: 18px;
   display: flex;
   width: 90%;
@@ -208,13 +230,6 @@ button:hover {
 .account-sidebar a:hover,
 .account-sidebar .active {
   color: rgb(130, 130, 130);
-}
-
-/*---------- sign-in/sign-up ----------*/
-
-.error-msg {
-  color: red;
-  text-align: center;
 }
 
 /*---------- shop ----------*/

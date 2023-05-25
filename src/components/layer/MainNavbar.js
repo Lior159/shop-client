@@ -8,21 +8,21 @@ const MainNavbar = () => {
   return (
     <header className="navbar">
       <ul className="item-list left">
-        <li className="item">
+        <li>
           <img src={logo} alt="logo" />
         </li>
-        <li className="item">
+        <li>
           <NavLink to="/">Home</NavLink>
         </li>
-        <li className="item">
+        <li>
           <NavLink to="/shop">Shop</NavLink>
         </li>
-        <li className="item">
+        <li>
           <NavLink to="/contact">Contact</NavLink>
         </li>
       </ul>
-      <ul className="item-list right">
-        <li className="item">
+      <ul className="item-list">
+        <li>
           <div className="search-box">
             <form>
               <input type="text" />
@@ -32,13 +32,12 @@ const MainNavbar = () => {
             </form>
           </div>
         </li>
-        <li className="item">
+        <li>
           <i className="fa-solid fa-cart-shopping"></i>
         </li>
-        <li className="item">
+        <li>
           <Button
             onClick={() => {
-              console.log("xxx");
               navigate("/sign-in");
             }}
           >

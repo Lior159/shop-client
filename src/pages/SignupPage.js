@@ -1,5 +1,5 @@
 import Input from "../components/ui/Input";
-import NewForm from "../components/ui/NewForm";
+import FormContainer from "../components/ui/FormContainer";
 import Button from "../components/ui/Button";
 import { useCallback, useReducer } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -142,60 +142,42 @@ const SignupPage = () => {
   }, []);
 
   return (
-    <NewForm onSubmit={submitHandler}>
+    <FormContainer onSubmit={submitHandler}>
       <Input
-        input={{
-          type: "text",
-          placeholder: "First Name",
-          value: inputState.firstNameValue,
-          onChange: firstNameChangeHandler,
-        }}
-        invalid={inputState.firstNameErr.length > 0}
+        placeholder="First Name"
+        value={inputState.firstNameValue}
+        onChange={firstNameChangeHandler}
+        err={inputState.firstNameErr}
       ></Input>
-      <h5>{inputState.firstNameErr}</h5>
       <Input
-        input={{
-          type: "text",
-          placeholder: "Last Name",
-          value: inputState.lastNameValue,
-          onChange: lastNameChangeHandler,
-        }}
-        invalid={inputState.lastNameErr.length > 0}
+        placeholder="Last Name"
+        value={inputState.lastNameValue}
+        onChange={lastNameChangeHandler}
+        err={inputState.lastNameErr}
       ></Input>
-      <h5>{inputState.lastNameErr}</h5>
       <Input
-        input={{
-          type: "text",
-          placeholder: "Email",
-          value: inputState.emailValue,
-          onChange: emailChangeHndler,
-        }}
-        invalid={inputState.emailErr.length > 0}
+        placeholder="Email"
+        value={inputState.emailValue}
+        onChange={emailChangeHndler}
+        err={inputState.emailErr}
       />
-      <h5>{inputState.emailErr}</h5>
       <Input
-        input={{
-          type: "password",
-          placeholder: "Password",
-          value: inputState.passwordValue,
-          onChange: passwordChangeHandler,
-        }}
-        invalid={inputState.passwordErr.length > 0}
+        type="password"
+        placeholder="Password"
+        value={inputState.passwordValue}
+        onChange={passwordChangeHandler}
+        err={inputState.passwordErr}
       />
-      <h5>{inputState.passwordErr}</h5>
       <Input
-        input={{
-          type: "password",
-          placeholder: "Confirm Password",
-          value: inputState.passwordConfirmValue,
-          onChange: passwordConfirmChangeHandler,
-        }}
-        invalid={inputState.passwordConfirmErr.length > 0}
+        type="password"
+        placeholder="Confirm Password"
+        value={inputState.passwordConfirmValue}
+        onChange={passwordConfirmChangeHandler}
+        err={inputState.passwordConfirmErr}
       />
-      <h5>{inputState.passwordConfirmErr}</h5>
       <Link to="/reset-password">Forgot your password?</Link>
       <Button>Sign Up</Button>
-    </NewForm>
+    </FormContainer>
   );
 };
 

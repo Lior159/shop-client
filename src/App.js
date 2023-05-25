@@ -4,6 +4,8 @@ import HomePage from "./pages/HomePage";
 import ShopPage from "./pages/ShopPage";
 import SigninPage from "./pages/SigninPage";
 import SignupPage from "./pages/SignupPage";
+import { useReducer } from "react";
+import AuthContext from "./store/auth-context";
 
 const router = createBrowserRouter([
   {
@@ -18,8 +20,30 @@ const router = createBrowserRouter([
   },
 ]);
 
+const authReducer = (state, action) => {
+  if (action.type === "LOGIN") {
+    return {
+      token: action.token,
+      userId: action.userId,
+    };
+  } else if (action.type === "LOGOUT") {
+    return {
+      token: undefined,
+      userId: undefined,
+    };
+  }
+};
+
 function App() {
-  return <RouterProvider router={router}></RouterProvider>;
+  const [authState, dispatchAuth] = useReducer(authReducer, {
+    token: undefined,
+    userId: undefined,
+  });
+  return (
+    <AuthContext.Provider value={{ authState, dispatchAuth }}>
+      <RouterProvider router={router}></RouterProvider>;
+    </AuthContext.Provider>
+  );
 }
 
 export default App;
